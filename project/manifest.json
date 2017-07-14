@@ -10,8 +10,13 @@
         "default_popup": "popup.html",
         "default_title": "GitPainter"
     },
+
+    "background": {
+        "scripts" : ["jquery.min.js", "background.js"]
+    },
+
     "permissions": [
-        "activeTab",
-        "<all_urls>"
+        "tabs",
+        "https://github.com/*"
     ]
 }
