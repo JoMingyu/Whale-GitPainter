@@ -1,7 +1,9 @@
 body {
     background: #333;
     color: #eee;
+    width : 320px; min-height:620px;
 }
+
 * {
     box-sizing: border-box;
 }
