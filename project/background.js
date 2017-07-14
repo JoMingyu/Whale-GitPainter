@@ -8,12 +8,23 @@ $(document).ready(function() {
             if(backOfUrl.length > 0) {
                 if(backOfUrl.split('/')[1] === undefined) {
                     // Profile
-                    alert('profile');
+                    paint();
                 } else {
                     // Repository
-                    alert('repo');
                 }
             }
         }
     });
 });
+
+function paint() {
+    for(let i = 0; i < 5; i++) {
+        $('.contrib-legend .legend li').eq(4 - i).css('background-color', '#ffffff');
+    }
+}
+
+function saveColor(position, colorCode) {
+    whale.storage.sync.set({position: colorCode}, () => {
+        alert('Saved');
+    });
+}
