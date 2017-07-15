@@ -1,23 +1,33 @@
 {
     "manifest_version": 2,
-    
     "name": "GitPainter",
     "description": "GitHub 프로필에 색을 입히기 위한 프로그램",
     "version": "1.0",
-    
     "browser_action": {
         "default_icon": "icon_temp.png",
         "default_popup": "popup.html",
         "default_title": "GitPainter"
     },
-
-    "background": {
-        "scripts" : ["js/jquery.min.js", "js/background.js"]
-    },
-
     "permissions": [
         "tabs",
         "storage",
         "https://github.com/*"
+    ],
+    "background": {
+        "scripts": [
+            "js/jquery.min.js",
+            "js/background.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://github.com/*"
+            ],
+            "js": [
+                "js/jquery.min.js",
+                "js/colormanager.js"
+            ]
+        }
     ]
 }
