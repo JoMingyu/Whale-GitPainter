@@ -32,9 +32,7 @@ app
     scope.presets = [
         'rgba(255, 82, 92, 1)',
         'rgba(247, 51, 255, 1)',
-        'rgba(135, 86, 255, 1)',
         'rgba(123, 172, 255, 1)',
-        'rgba(112, 255, 253, 1)',
         'rgba(147, 255, 159, 1)',
         'rgba(255, 244, 89, 1)',
         'rgba(255, 157, 74, 1)',
@@ -203,25 +201,25 @@ app
         scope.$apply();
     }, 250);
     
-    //Show
-    angular.element(previewEl).mousedown(function(e) {
-        e.stopPropagation();
-        var popup = angular.element(module);
-        if (angular.element(module).hasClass('hidemodule')) {
-            popup.removeClass('hidemodule');
-            scope.rgbaStringToUpdate(scope.value);
-        } else {
-            popup.addClass('hidemodule');
-        }
-    });
-    //hide
-    angular.element(document).mousedown(function(e) {
-        var popup = angular.element(module);
-        if (!angular.element(module).hasClass('hidemodule')) {
-            popup.addClass('hidemodule');
-        }
-    });
-    
+    // //Show
+    // angular.element(previewEl).mousedown(function(e) {
+    //     e.stopPropagation();
+    //     var popup = angular.element(module);
+    //     if (angular.element(module).hasClass('hidemodule')) {
+    //         popup.removeClass('hidemodule');
+    //         scope.rgbaStringToUpdate(scope.value);
+    //     } else {
+    //         popup.addClass('hidemodule');
+    //     }
+    // });
+    // //hide
+    // angular.element(document).mousedown(function(e) {
+    //     var popup = angular.element(module);
+    //     if (!angular.element(module).hasClass('hidemodule')) {
+    //         popup.addClass('hidemodule');
+    //     }
+    // });
+        
     var bCanPreview = true;
     angular.element(canvas).mousemove(function(e) {
         changeColor(e);
