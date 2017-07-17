@@ -28,6 +28,12 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
             $('.contrib-legend .legend li').eq(i).css('background-color', contribColors[i]);
         }
 
-        
+        let originGraph = $('div.js-calendar-graph > svg > g g');
+        for (let i = 0; i < originGraph.length; i++) {
+            let rects = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) rect`);
+            for(let rect; rect < rects; rect++) {
+                let origin = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) > rect:nth-child(${rect + 1})`);
+            }
+        }
     });
 });
