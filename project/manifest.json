@@ -4,7 +4,7 @@
     "description": "GitHub 프로필에 색을 입히기 위한 프로그램",
     "version": "1.0",
     "browser_action": {
-        "default_icon": "icon_temp.png",
+        "default_icon": "icon.png",
         "default_popup": "popup.html",
         "default_title": "GitPainter"
     },
