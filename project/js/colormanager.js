@@ -11,7 +11,6 @@ function loadContribColors(cb) {
                 contribColors[i] = originColors[i];
             }
         }
-
         cb();
     });
 }
@@ -31,8 +30,10 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
         let originGraph = $('div.js-calendar-graph > svg > g g');
         for (let i = 0; i < originGraph.length; i++) {
             let rects = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) rect`);
-            for(let rect; rect < rects; rect++) {
-                let origin = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) > rect:nth-child(${rect + 1})`);
+            for(let j = 0; j < rects.length; j++) {
+                let origin = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) > rect:nth-child(${j + 1})`);
+                let index = originColors.indexOf(origin.attr('fill'));
+                origin.attr('fill', contribColors[index]);
             }
         }
     });
