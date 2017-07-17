@@ -1,11 +1,14 @@
-let contribColors = ['#eee', '#c6e48b', '#7bc96f', '#239a3b', '#196127'];
+let originColors = ['#eee', '#c6e48b', '#7bc96f', '#239a3b', '#196127'];
+let contribColors = new Array(5);
 
 function loadContribColors(cb) {
     whale.storage.sync.get(undefined, items => {
-        for (let i = 1; i <= 5; i++) {
-            let colorCode = items[i.toString()];
+        for (let i = 0; i < 5; i++) {
+            let colorCode = items[i];
             if (colorCode !== undefined) {
-                contribColors[i - 1] = colorCode;
+                contribColors[i] = colorCode;
+            } else {
+                contribColors[i] = originColors[i];
             }
         }
 
@@ -24,5 +27,7 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
         for (let i = 0; i < 5; i++) {
             $('.contrib-legend .legend li').eq(i).css('background-color', contribColors[i]);
         }
+
+        
     });
 });
