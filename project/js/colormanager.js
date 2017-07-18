@@ -29,7 +29,7 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     function changeLegend() {
         for (let i = 0; i < 5; i++) {
-            $('.contrib-legend .legend li').eq(i).css('background-color', contribColors[i]);
+            $(`.contrib-legend .legend li:eq(${i})`).css('background-color', contribColors[i]);
         }
     }
 
@@ -38,7 +38,6 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
         for (let i = 0; i < originGraph.length; i++) {
             let rects = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) rect`);
             for (let j = 0; j < rects.length; j++) {
-                // alert(originColors.indexOf(rects.eq(j).attr('fill')));
                 let rect = rects.eq(j);
                 let index = originColors.indexOf(rect.attr('fill'));
                 rect.attr('fill', contribColors[index]);
