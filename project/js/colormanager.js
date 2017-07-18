@@ -12,12 +12,6 @@ function loadColors(cb) {
                 contribColors[i] = originColors[i];
             }
         }
-        cb();
-    });
-}
-
-function loadRepoColor(cb) {
-    whale.storage.sync.get(undefined, items => {
         repoColor = items[5];
         cb();
     });
@@ -32,12 +26,9 @@ function saveColor(position, colorCode) {
 }
 
 whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    loadContribColors(() => {
+    loadColors(() => {
         changeLegend();
         changeCalendar();
-    });
-
-    loadRepoColor(() => {
         changePinnedRepoColor();
     });
 
