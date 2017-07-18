@@ -27,18 +27,17 @@ function saveColor(position, colorCode) {
 
 whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
     loadColors(() => {
-        changeLegend();
         changeCalendar();
         changePinnedRepoColor();
     });
 
-    function changeLegend() {
+    function changeCalendar() {
+        // Less - More color
         for (let i = 0; i < 5; i++) {
             $(`.contrib-legend .legend li:eq(${i})`).css('background-color', contribColors[i]);
         }
-    }
 
-    function changeCalendar() {
+        // Calendar
         let originGraph = $('div.js-calendar-graph svg g g');
         for (let i = 0; i < originGraph.length; i++) {
             let rects = $(`div.js-calendar-graph svg g g:nth-child(${i + 1}) rect`);
