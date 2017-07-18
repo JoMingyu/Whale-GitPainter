@@ -1,7 +1,8 @@
 let originColors = ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127'];
 let contribColors = new Array(5);
+let repoColor;
 
-function loadContribColors(cb) {
+function loadColors(cb) {
     whale.storage.sync.get(undefined, items => {
         for (let i = 0; i < 5; i++) {
             let colorCode = items[i];
@@ -15,8 +16,17 @@ function loadContribColors(cb) {
     });
 }
 
-function changeContribColor(position, colorCode) {
+function loadRepoColor(cb) {
+    whale.storage.sync.get(undefined, items => {
+        repoColor = items[5];
+        cb();
+    });
+}
+
+function saveColor(position, colorCode) {
     whale.storage.sync.set({ [position]: colorCode }, () => {
+        // 컨트리뷰트 컬러는 zero-based numbering 방식으로 5개(0~4)
+        // 레포 컬러는 position 5로 두도록 함
         // https://stackoverflow.com/questions/11692699/chrome-storage-local-set-using-a-variable-key-name
     });
 }
@@ -24,7 +34,11 @@ function changeContribColor(position, colorCode) {
 whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
     loadContribColors(() => {
         changeLegend();
-        changeCalendar();        
+        changeCalendar();
+    });
+
+    loadRepoColor(() => {
+        changePinnedRepoColor();
     });
 
     function changeLegend() {
@@ -41,6 +55,16 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 let rect = rects.eq(j);
                 let index = originColors.indexOf(rect.attr('fill'));
                 rect.attr('fill', contribColors[index]);
+            }
+        }
+    }
+
+    function changePinnedRepoColor() {
+        if (repoColor === undefined) {
+            return;
+        } else {
+            for (let i = 0; i < 6; i++) {
+                $(`.repo.js-repo:eq(${i})`).css('color', repoColor);
             }
         }
     }
