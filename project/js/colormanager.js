@@ -34,9 +34,9 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 
     function changeCalendar() {
-        let originGraph = $('div.js-calendar-graph > svg > g g');
+        let originGraph = $('div.js-calendar-graph svg g g');
         for (let i = 0; i < originGraph.length; i++) {
-            let rects = $(`div.js-calendar-graph > svg > g > g:nth-child(${i + 1}) rect`);
+            let rects = $(`div.js-calendar-graph svg g g:nth-child(${i + 1}) rect`);
             for (let j = 0; j < rects.length; j++) {
                 let rect = rects.eq(j);
                 let index = originColors.indexOf(rect.attr('fill'));
