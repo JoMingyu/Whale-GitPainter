@@ -173,7 +173,33 @@ app
         scope.rgba = drgba;
         myEfficientFn();
     };
-    
+     
+    $(".cpick-expression>input").keyup(function(e){
+        var index = inputEl.toArray().indexOf(e.target);
+        if(index == 0){
+            //HEX
+            var hex = $(this)[0].val();
+        }else if(index >= 1 && index <= 4){
+            //RGB
+            var rgb = "rgba("
+                +$(this)[1].val()+","
+                +$(this)[2].val()+","
+                +$(this)[3].val()+","
+                +$(this)[4].val()+")";
+        }else if(index >= 5 && index <= 8){
+            //HSL
+            var rgb = "hsla("
+                +$(this)[5]+","
+                +$(this)[6]+","
+                +$(this)[7]+","
+                +$(this)[8]+")";
+        }
+    });
+
+    function getColorFromCanvas(){
+        
+    }
+
     function rgbToHsl(r, g, b){
 		r /= 255, g /= 255, b /= 255;
 		var max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -183,19 +209,16 @@ app
 		else {
 			var d = max - min;
 			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
 			switch (max){
 				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
 				case g: h = (b - r) / d + 2; break;
 				case b: h = (r - g) / d + 4; break;
 			}
-			
 			h /= 6;
 		}
-		
 		return [(h*100+0.5)|0, ((s*100+0.5)|0) + '%', ((l*100+0.5)|0) + '%'];
 	}
-
+    
     function changeColor(e) {
       if (bCanPreview && cdown) {
         canvas.style.cursor = 'none';
@@ -213,7 +236,7 @@ app
         colorUpdate(pixel[0], pixel[1], pixel[2]);
       }
     };
-    
+
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
