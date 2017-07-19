@@ -48,6 +48,7 @@ app
         brightIndicatorEl = element.find('.cpick-brightness-indicator')[0],
         transIndicatorEl = element.find('.cpick-transparency-indicator')[0],
         ctx = canvas.getContext('2d');
+        inputEl = element.find('.cpick-expression>input');
     
     var cdown = false, tdown = false, bdown = false, updateModel = false;
 
@@ -154,10 +155,69 @@ app
         var dColor = scope.blue + 256 * scope.green + 65536 * scope.red;
         scope.hex = '#' + ('0000' + dColor.toString(16)).substr(-6);
 
+        // update preview <input>
+        // HEX
+        angular.element(inputEl[0]).val(scope.hex);
+        // RGB
+        angular.element(inputEl[1]).val(scope.red);
+        angular.element(inputEl[2]).val(scope.green);
+        angular.element(inputEl[3]).val(scope.blue);
+        angular.element(inputEl[4]).val(scope.transparency);
+        // HSL
+        var hsl = rgbToHsl(scope.red, scope.green, scope.blue);
+        angular.element(inputEl[5]).val(hsl[0]);
+        angular.element(inputEl[6]).val(hsl[1]);
+        angular.element(inputEl[7]).val(hsl[2]);
+        angular.element(inputEl[8]).val(scope.transparency);
+
         scope.rgba = drgba;
         myEfficientFn();
-
     };
+     
+    $(".cpick-expression>input").keyup(function(e){
+        var index = inputEl.toArray().indexOf(e.target);
+        if(index == 0){
+            //HEX
+            var hex = $(this)[0].val();
+        }else if(index >= 1 && index <= 4){
+            //RGB
+            var rgb = "rgba("
+                +$(this)[1].val()+","
+                +$(this)[2].val()+","
+                +$(this)[3].val()+","
+                +$(this)[4].val()+")";
+        }else if(index >= 5 && index <= 8){
+            //HSL
+            var rgb = "hsla("
+                +$(this)[5]+","
+                +$(this)[6]+","
+                +$(this)[7]+","
+                +$(this)[8]+")";
+        }
+    });
+
+    function getColorFromCanvas(){
+        
+    }
+
+    function rgbToHsl(r, g, b){
+		r /= 255, g /= 255, b /= 255;
+		var max = Math.max(r, g, b), min = Math.min(r, g, b);
+		var h, s, l = (max + min) / 2;
+
+		if (max == min) { h = s = 0; } 
+		else {
+			var d = max - min;
+			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+			switch (max){
+				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+				case g: h = (b - r) / d + 2; break;
+				case b: h = (r - g) / d + 4; break;
+			}
+			h /= 6;
+		}
+		return [(h*100+0.5)|0, ((s*100+0.5)|0) + '%', ((l*100+0.5)|0) + '%'];
+	}
     
     function changeColor(e) {
       if (bCanPreview && cdown) {
@@ -174,10 +234,9 @@ app
         var imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
         var pixel = imageData.data;
         colorUpdate(pixel[0], pixel[1], pixel[2]);
-
       }
     };
-    
+
     function debounce(func, wait, immediate) {
     	var timeout;
     	return function() {
@@ -312,16 +371,22 @@ app
                 '<div class="cpick-square" ng-repeat="preset in presets" ng-style="{\'background-color\': preset}" ng-click="rgbaStringToUpdate(preset)"></div>'+
             '</div>'+
             '<div class="cpick-expression">'+
-                '<span>RGB</span>'+
-                '<input type="text">'+
-            '</div>'+
-            '<div class="cpick-expression">'+
                 '<span>HEX</span>'+
                 '<input type="text">'+
             '</div>'+
             '<div class="cpick-expression">'+
+                '<span>RGB</span>'+
+                'R<input type="text">'+
+                'G<input type="text">'+
+                'B<input type="text">'+
+                'A<input type="text">'+
+            '</div>'+
+            '<div class="cpick-expression">'+
                 '<span>HSL</span>'+
-                '<input type="text">'+
+                'H<input type="text">'+
+                'S<input type="text">'+
+                'L<input type="text">'+
+                'A<input type="text">'+
             '</div>'+
             '<div class="cpick-painter-preview">'+
                 '<div class="paint-box"></div>'+
