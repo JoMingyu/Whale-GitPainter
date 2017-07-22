@@ -170,55 +170,119 @@ app
         angular.element(inputEl[7]).val(hsl[2]);
         angular.element(inputEl[8]).val(scope.transparency);
 
+        // set less more
+        var paintBoxEl = element.find('.paint-box.active');
+        angular.element(paintBoxEl).css({
+            'background-color': drgba
+        });
+
         scope.rgba = drgba;
         myEfficientFn();
     };
      
+    $(".cpick-painter-preview>div").click(function(e){
+        $(".cpick-painter-preview>div").toArray().forEach(function(element) {
+            if(element.classList.contains("active"))
+                element.classList.remove("active");
+        }, this);
+        e.target.classList.add("active");
+    });
+
     $(".cpick-expression>input").keyup(function(e){
+        var colors = $(".cpick-expression>input");
         var index = inputEl.toArray().indexOf(e.target);
-        if(index == 0){
-            //HEX
-            var hex = $(this)[0].val();
-        }else if(index >= 1 && index <= 4){
-            //RGB
-            var rgb = "rgba("
-                +$(this)[1].val()+","
-                +$(this)[2].val()+","
-                +$(this)[3].val()+","
-                +$(this)[4].val()+")";
-        }else if(index >= 5 && index <= 8){
-            //HSL
-            var rgb = "hsla("
-                +$(this)[5]+","
-                +$(this)[6]+","
-                +$(this)[7]+","
-                +$(this)[8]+")";
+        if(e.keyCode == 13){
+            if(index == 0){
+                // var hex = colors[0].value;
+                var rgb = hexToRgb(colors[0].value);
+                colorUpdate(rgb.r, rgb.g, rgb.b);
+            }
+            else if(index >= 1 && index <= 4){
+                // var rgb = "rgba("
+                // for(var i = 1; i <= 3; i++){
+                //     rgb += colors[i].value + ",";
+                // }
+                // rgb += colors[4].value + ");"
+
+                colorUpdate(colors[1].value, colors[2].value, colors[3].value, colors[4].value);
+            }
+            else if(index >= 5 && index <= 8){
+                // var hsl = "hsla("
+                // for(var i = 5; i <= 7; i++){
+                //     hsl += colors[i].value + ",";
+                // }
+                // hsl += colors[8].value + ");"
+                var rgb = hslToRgb(parseFloat(colors[5].value) / 360,
+                                    parseFloat(colors[6].value) / 100,
+                                    parseFloat(colors[7].value) / 100);
+                colorUpdate(rgb.r, rgb.g, rgb.b);
+            }
         }
     });
 
-    function getColorFromCanvas(){
-        
+    function hexToRgb(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
+    function hslToRgb(h, s, l){
+        var r, g, b;
+
+        if(s == 0){
+            r = g = b = l; // achromatic
+        }else{
+            var hue2rgb = function hue2rgb(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        return { r: Math.round(r * 255),
+                 g: Math.round(g * 255),
+                 b: Math.round(b * 255)};
     }
 
     function rgbToHsl(r, g, b){
-		r /= 255, g /= 255, b /= 255;
-		var max = Math.max(r, g, b), min = Math.min(r, g, b);
-		var h, s, l = (max + min) / 2;
+        r /= 255, g /= 255, b /= 255;
+        var max = Math.max(r, g, b), min = Math.min(r, g, b);
+        var h, s, l = (max + min) / 2;
 
-		if (max == min) { h = s = 0; } 
-		else {
-			var d = max - min;
-			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-			switch (max){
-				case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-				case g: h = (b - r) / d + 2; break;
-				case b: h = (r - g) / d + 4; break;
-			}
-			h /= 6;
-		}
-		return [(h*100+0.5)|0, ((s*100+0.5)|0) + '%', ((l*100+0.5)|0) + '%'];
-	}
-    
+        if(max == min){
+            h = s = 0; // achromatic
+        }else{
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max){
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+
+        return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+    }
+
     function changeColor(e) {
       if (bCanPreview && cdown) {
         canvas.style.cursor = 'none';
