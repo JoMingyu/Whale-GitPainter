@@ -170,10 +170,24 @@ app
         angular.element(inputEl[7]).val(hsl[2]);
         angular.element(inputEl[8]).val(scope.transparency);
 
+        // set less more
+        var paintBoxEl = element.find('.paint-box.active');
+        angular.element(paintBoxEl).css({
+            'background-color': drgba
+        });
+
         scope.rgba = drgba;
         myEfficientFn();
     };
      
+    $(".cpick-painter-preview>div").click(function(e){
+        $(".cpick-painter-preview>div").toArray().forEach(function(element) {
+            if(element.classList.contains("active"))
+                element.classList.remove("active");
+        }, this);
+        e.target.classList.add("active");
+    });
+
     $(".cpick-expression>input").keyup(function(e){
         var colors = $(".cpick-expression>input");
         var index = inputEl.toArray().indexOf(e.target);
