@@ -13,9 +13,6 @@ function loadColors(cb) {
             }
         }
         repoColor = items[5];
-        $('.paint-box').toArray().forEach(function(element) {
-            element.css({'background-color': item[i]});
-        }, this);
         cb();
     });
 }
