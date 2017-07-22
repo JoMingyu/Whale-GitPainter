@@ -125,6 +125,7 @@ app
         };
         
     };
+
     function colorUpdate(r, g, b, a, d) {
         if (r) {scope.red = r;}
         if (g) {scope.green = g;}
@@ -392,7 +393,6 @@ app
         bdown = false;
         canvas.style.cursor = 'crosshair';
     });
-    
 
     ngModel.$render = function(){
         scope.value = ngModel.$modelValue;
@@ -404,6 +404,7 @@ app
         colorUpdate(rgba[0], rgba[1], rgba[2], rgba[3]);
         setTransparency(rgba[3]);
     },300);
+    
     drawBg();
   }
 
