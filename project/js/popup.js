@@ -402,6 +402,21 @@ app
 
     ngModel.$render = function(){
         scope.value = ngModel.$modelValue;
+        whale.storage.sync.get(undefined, items => {
+            for (let i = 0; i < 5; i++) {
+                let colorCode = items[i];
+                if (colorCode !== undefined) {
+                    contribColors[i] = colorCode;
+                } else {
+                    contribColors[i] = originColors[i];
+                }
+                var box = element.find(".paint-box")[i];
+                angular.element(box).css({
+                    'background-color': contribColors[i]
+                });
+            }
+            repoColor = items[5];
+        });
     };
     
     setTimeout(function(){
