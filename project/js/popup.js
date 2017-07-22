@@ -47,8 +47,9 @@ app
         brightnessEl = element.find('.cpick-brightness')[0],
         brightIndicatorEl = element.find('.cpick-brightness-indicator')[0],
         transIndicatorEl = element.find('.cpick-transparency-indicator')[0],
-        ctx = canvas.getContext('2d');
-        inputEl = element.find('.cpick-expression>input');
+        ctx = canvas.getContext('2d'),
+        inputEl = element.find('.cpick-expression>input'),
+        selectedIndex;
     
     var cdown = false, tdown = false, bdown = false, updateModel = false;
 
@@ -179,14 +180,19 @@ app
 
         scope.rgba = drgba;
         myEfficientFn();
+
+        saveColor(selectedIndex, drgba);
     };
-     
+
     $(".cpick-painter-preview>div").click(function(e){
-        $(".cpick-painter-preview>div").toArray().forEach(function(element) {
-            if(element.classList.contains("active"))
+        var $boxes = $(".cpick-painter-preview>div").toArray();
+        $boxes.forEach(function(element) {
+            if(element.classList.contains("active")){
                 element.classList.remove("active");
+            }
         }, this);
         e.target.classList.add("active");
+        selectedIndex = $boxes.indexOf(e.target);
     });
 
     $(".cpick-expression>input").keyup(function(e){
@@ -331,7 +337,7 @@ app
     //     var popup = angular.element(module);
     //     if (angular.element(module).hasClass('hidemodule')) {
     //         popup.removeClass('hidemodule');
-    //         scope.rgbaStringToUpdate(scope.value);
+    //         scope.rgbaStringToUpdate(o.value);
     //     } else {
     //         popup.addClass('hidemodule');
     //     }

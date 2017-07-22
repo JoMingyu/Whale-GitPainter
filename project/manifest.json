@@ -26,7 +26,8 @@
             ],
             "js": [
                 "js/jquery.min.js",
-                "js/colormanager.js"
+                "js/colormanager.js",
+                "js/popup.js"
             ]
         }
     ]
