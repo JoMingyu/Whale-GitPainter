@@ -1,7 +1,8 @@
 body {
     background: #333;
     color: #eee;
-    width : 320px; min-height:640px;
+    width : 320px; 
+    min-height:640px;
     overflow: hidden;
 }
 
@@ -151,6 +152,9 @@ body {
     margin-top: 15px;
     position: relative;
 }
+.cpick-presets{
+    margin-top: 0px;
+}
 .cpick-grayscale:after, .cpick-presets:after {
     content: '';
     display: block;
@@ -164,11 +168,14 @@ body {
     background: #333;
     float: left;
     margin-bottom: 10px;
-    box-shadow: 5px 5px 5px rgba(0,0,0,.2);
     font-size: 0;
     transition: all 0.3s ease-in-out;
     overflow: hidden;
     margin-right: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.cpick-square:hover{
+    box-shadow: 0 2px 5px rgba(0,0,0,0.16), 0 2px 6px rgba(0,0,0,0.3);
 }
 .cpick-square:before {
   content: '';
@@ -229,4 +236,25 @@ body {
 .cpick-painter-preview>p{
     margin: 0;
     color: #555;
+}
+.cpick-footer{
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.cpick-reset{
+    margin-top: 5px;
+    height: 20px;
+    width: 100%;
+    background-color: #ff88b2;
+    outline: 0;
+    border: 0px solid white;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.cpick-reset:hover{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }

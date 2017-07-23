@@ -116,6 +116,15 @@ app
         setTransparency(rgba[3]);
     };
     
+    scope.resetColor = function(){
+        var paintBoxEl = element.find('.paint-box');
+        for(var i = 0; i < 5; i++){
+            angular.element(paintBoxEl[i]).css({
+                'background-color': originColors[i]
+            });
+        }
+    }
+
     function shadeRGBColor(color, percent) {
         var f=color.split(","),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=parseInt(f[0].slice(4)),G=parseInt(f[1]),B=parseInt(f[2]);
         //return "rgba("+(Math.round((t-R)*p)+R)+", "+(Math.round((t-G)*p)+G)+", "+(Math.round((t-B)*p)+B)+", "+scope.transparency+")";
@@ -481,6 +490,7 @@ app
                 '<div class="paint-box"></div>'+
                 '<div class="paint-box"></div>'+
             '</div>'+
+            '<button class="cpick-reset" ng-click="resetColor()">Clear All</button>'+
         '</div>'+
     '</div>'
     
