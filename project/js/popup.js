@@ -122,6 +122,7 @@ app
             angular.element(paintBoxEl[i]).css({
                 'background-color': originColors[i]
             });
+            saveColor(i, originColors[i]);
         }
     }
 
