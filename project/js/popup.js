@@ -1,14 +1,9 @@
-
-
 var app = angular.module('app', []);
 
 app
 .controller('startCtrl', function($scope) {
     $scope.color = 'rgba(135, 86, 255, 1)';
     $scope.color2 = 'rgba(112, 255, 253, 1)';
-    $scope.test = function() {
-        console.log($scope.color);
-    };
 })
 
 app
@@ -49,7 +44,10 @@ app
         transIndicatorEl = element.find('.cpick-transparency-indicator')[0],
         ctx = canvas.getContext('2d'),
         inputEl = element.find('.cpick-expression>input'),
-        selectedIndex;
+        selectedIndex,
+        tempColor,
+        previousTarget,
+        workingStack = new Array();
     
     var cdown = false, tdown = false, bdown = false, updateModel = false;
 
@@ -57,7 +55,7 @@ app
         canvas.width = canvaswrapper.offsetWidth;
         canvas.height = canvaswrapper.offsetHeight;
         var image = new Image(),
-            url= 'http://jonathanhagglund.se/projects/codepen-assets/cwheeltintcrop.png';
+            url= '\\images\\hsl-color-circle-min3.png';
         image.src = url + '?' + new Date().getTime();
         image.setAttribute('crossOrigin', '');
         image.onload = function () {
@@ -109,7 +107,6 @@ app
     };
     
     scope.rgbaStringToUpdate = function(rgba) {
-        console.log(rgba);
         setBrightness(0);
         rgba = rgba.substring(rgba.indexOf('(') + 1, rgba.lastIndexOf(')')).split(/,\s*/);
         colorUpdate(rgba[0], rgba[1], rgba[2], rgba[3]);
@@ -195,6 +192,10 @@ app
     };
 
     $(".cpick-painter-preview>div").click(function(e){
+        if(previousTarget !== e.target){
+            tempColor = [];
+        }
+
         var $boxes = $(".cpick-painter-preview>div").toArray();
         $boxes.forEach(function(element) {
             if(element.classList.contains("active")){
@@ -203,6 +204,19 @@ app
         }, this);
         e.target.classList.add("active");
         selectedIndex = $boxes.indexOf(e.target);
+
+        previousTarget = e.target;
+    });
+
+    $(document).keyup(function(e){
+        if (e.ctrlKey && e.keyCode == 90) {
+            var previousColor = workingStack.pop();
+
+            var paintBoxEl = element.find('.paint-box.active');
+            angular.element(paintBoxEl).css({
+                'background-color': 'rgba(' + previousColor[0] + ',' + previousColor[1] + ',' + previousColor[2] + ',' + previousColor[3] + ');'
+            });
+        }
     });
 
     $(".cpick-expression>input").keyup(function(e){
@@ -314,6 +328,7 @@ app
         // get current pixel
         var imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
         var pixel = imageData.data;
+        tempColor = pixel;
         colorUpdate(pixel[0], pixel[1], pixel[2]);
       }
     };
@@ -340,25 +355,6 @@ app
         ngModel.$render();
         scope.$apply();
     }, 250);
-    
-    // //Show
-    // angular.element(previewEl).mousedown(function(e) {
-    //     e.stopPropagation();
-    //     var popup = angular.element(module);
-    //     if (angular.element(module).hasClass('hidemodule')) {
-    //         popup.removeClass('hidemodule');
-    //         scope.rgbaStringToUpdate(o.value);
-    //     } else {
-    //         popup.addClass('hidemodule');
-    //     }
-    // });
-    // //hide
-    // angular.element(document).mousedown(function(e) {
-    //     var popup = angular.element(module);
-    //     if (!angular.element(module).hasClass('hidemodule')) {
-    //         popup.addClass('hidemodule');
-    //     }
-    // });
         
     var bCanPreview = true;
     angular.element(canvas).mousemove(function(e) {
@@ -370,6 +366,7 @@ app
     angular.element(canvas).mouseup(function(e) {
         cdown = false;
         canvas.style.cursor = 'crosshair';
+        workingStack.push(tempColor);
     });
     
     angular.element( brightnessEl ).mousemove(function(e) {
@@ -447,7 +444,7 @@ app
     link: link,
     template:
     '<div class="cpick-preview" ng-model="value">'+
-        '<div class="cpick-module">'+ //class hidemodule
+        '<div class="cpick-module">'+
             '<div class="cpick">'+
                 '<canvas id="color-canvas"></canvas>'+
                 '<div class="darkness"></div>'+
