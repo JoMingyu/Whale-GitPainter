@@ -47,6 +47,19 @@ whale.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 rect.attr('fill', contribColors[index]);
             }
         }
+
+        //ProgressBar
+        let progressbars = $(".progress-bar");
+        for(let i = 0; i < progressbars.length; i++){
+            let progressbar = progressbars.eq(i);
+
+            console.log(progressbar.style);
+            let index = originColors.indexOf("#" + progressbar.css('backgroundColor').split("(")[1].split(")")[0].split(",").map(function(x){
+                x = parseInt(x).toString(16);  
+                return (x.length==1) ? "0"+x : x;
+            }).join(""));
+            progressbar.css({"background-color": contribColors[index]});
+        }
     }
 
     function changePinnedRepoColor() {
